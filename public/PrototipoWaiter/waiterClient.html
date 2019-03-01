@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cliente de la soda</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+        $(document).ready(function(){
+
+            let cliente = undefined;
+            /*
+            Logica de los sockets
+            */
+            const config = {reconnection:true,
+                            reconnectionAttempts:5};
+
+            const socket = io.connect('/waiter',config);
+
+            socket.on('reconnect_failed',function(){
+                console.log("Fallo al intentar la reconexión, salga y vuleva a intentarlo más tarde!");
+            });
+
+            socket.on('reconnect_attempt',function(number){
+                console.log("intento de reconexion numero "+number);
+            });
+
+            socket.on('reconnecting',function(numIntento){
+                console.log("reconnecting en el intento "+numIntento+"...");
+            });
+
+            socket.on('reconnect',function(){
+                if(cliente){
+                    socket.emit('login',cliente);
+                }else{
+                    console.log("Necesita logearse para entrar a nuestro sistema");
+                }
+            });
+
+            socket.on('connect_error',function(){
+                console.log("Error de conexion!");
+            });
+
+            //Al momento de conectarse se ejecuta la funcion que se encuentra dentro.
+            socket.on('connect',function(){
+                //Cuando se recive respuesta del envio de un pedido.
+                socket.on('enviar-pedido',function(data){
+                    if(data.error){
+                        console.log(data.error);
+                    }
+                    else{
+                        console.log(data.exito);
+                    }
+                });
+                
+                console.log('Te has conectado!');
+            });
+
+            socket.on('disconnect',function(){
+                console.log('Te has desconectado!');
+            });
+
+            /*
+            Termina logica de los sockets.
+            */
+
+            /*
+            Lógica de pedidos
+            */
+            let listaPedidos = [];
+
+            let cuerpoDeTabla = $('#tableBody');
+
+            function crearFilaPedido(nombreComida,precio){
+                let fila = $("<tr></tr>");
+
+                let cuerpoFila = "<td style='font-size: 1em;height:50px;' class = 'nombre' data-comida='"+nombreComida+"'>"+nombreComida+"</td>"+
+                                "<td style='font-size: 1em;height:50px;' class = 'precio' data-precio='"+precio+"'>"+precio+"</td>"+
+                                "<td class = 'cantidad'><input style='font-size: 2em;width:100px;' class='pointer' type='text'/></td>"+
+                                "<td><button class='pointer'>Agregar pedido</button></td>";
+
+                fila.append(cuerpoFila);
+                cuerpoDeTabla.append(fila);
+            }
+
+            function saludar(nombre){
+                let saludo = "Bienvenido(a) "+nombre;
+                $('#bienvenida').text(saludo);
+            }
+
+            function mostrarMenu(){
+
+                let data = [{nombre:"Hamburguesa",precio:1000},{nombre:"Hamburguesa con papas",precio:1500}];
+                $('#tituloMenu').text("Menu jehová jireth");
+
+                let cabeceraDeTabla = "<tr>"+
+                                    "<th>Nombre</th>"+
+                                    "<th>Precio</th>"+
+                                    "<th>cantidad</th>"+
+                                    "<th>Accion</th>"+
+                                    "</tr>";
+
+                $("#cabeceraTabla").append(cabeceraDeTabla);
+
+                for(let i=0;i<data.length;i++){
+                    crearFilaPedido(data[i].nombre,data[i].precio);
+                }
+                //Agrega un escuchador de eventos para cada boton de la interfaz.
+                agregarListener();
+                crearCarritoCompras();
+                crearLogicaCompras();
+            }
+
+            function crearCarritoCompras(){
+                let htmlCarrito = "<label style='font-size: 40px;'><b>Carrito de compras</b></label></body><br>"+
+                "<button id='limpiar' style='font-size: 1em;'>Vaciar carrito de compras</button><br>"+
+                "<textarea id='carrito' style='width: 400px; height: 200px; font-size: 1em;'></textarea><br>"+
+                "<button style='height:50px;font-size: 1em;' id='enviarPedido'>Enviar pedido</button>";
+
+                $("#carritoCompras").append(htmlCarrito);
+            }
+
+            function crearLogicaCompras(){
+
+                $('#limpiar').click(function(){
+                    if(!(listaPedidos.length > 0)){
+                        alert('El carrito se encuentra vacío');
+                        return;
+                    }
+                    listaPedidos = [];
+                    $('#carrito').val("");
+                    alert('El carrito de compras se ha limpiado');
+                });
+
+                $('#enviarPedido').click(function(){
+                    if(!(listaPedidos.length > 0)){
+                        alert('No has hecho tu lista de pedidos aún!!');
+                        return;
+                    }
+
+                    let comidas = [];
+                    for (let index = 0; index < listaPedidos.length; index++) {
+                        const element = listaPedidos[index];
+                        let comida = {};
+                        comida.comida = element["comida"];
+                        comida.precio = parseInt(element["precio"]);
+                        comida.cantidad = parseInt(element["cantidad"]);
+                        comidas.push(comida);
+                    }
+
+                    //Se arma el pedido y se envía...
+                    let pedido = {cliente:"Bryan Hernandez",listado:comidas,total:3000};
+
+                    $.ajax({
+                        url: '/addOrder',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log(data);
+                            socket.emit('waiter-send-order',data);
+                        },
+                        data: JSON.stringify(pedido)
+                    });
+
+                });
+
+                $('#btnReady').click(function(){
+                    let number = $('#orderNumber').val();
+                    
+                    let dataToSend = {numeroOrden:parseInt(number),estado:'l'};
+
+                    $.ajax({
+                        url: '/markOrder',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log("Respuesta del servidor al marcar la orden"+ JSON.stringify(data));
+                            let dataToSendSodaScreen = {numeroOrden:data.numeroOrden,estado:'l'};
+                            socket.emit('waiter-mark-order',dataToSendSodaScreen);
+                        },
+                        data: JSON.stringify(dataToSend)
+                    });
+                });
+
+                $('#btnSold').click(function(){
+                    let number = $('#orderNumberToSold').val();
+                    
+                    let dataToSend = {numeroOrden:parseInt(number),estado:'v'};
+
+                    $.ajax({
+                        url: '/markOrder',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log("Respuesta del servidor al marcar la orden"+ JSON.stringify(data));
+                            let dataToSendSodaScreen = {numeroOrden:data.numeroOrden,estado:'v'};
+                            socket.emit('waiter-mark-order',dataToSendSodaScreen);
+                        },
+                        data: JSON.stringify(dataToSend)
+                    });
+                });
+
+                $('#btnDelete').click(function(){
+                    let number = $('#orderNumberToDelete').val();
+                    
+                    let dataToSend = {orderNumber:parseInt(number)};
+
+                    $.ajax({
+                        url: '/deleteOrder',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (order) {
+                            console.log(order);
+                            socket.emit('waiter-delete-order',order);
+                        },
+                        data: JSON.stringify(dataToSend)
+                    });
+
+                });
+
+                
+                $('#btnPending').click(function(){
+                    let number = $('#orderNumberToPending').val();
+                    
+                    let dataToSend = {numeroOrden:parseInt(number),estado:'p'};
+
+                    $.ajax({
+                        url: '/markOrder',
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        success: function (data) {
+                            console.log("Respuesta del servidor al marcar la orden"+ JSON.stringify(data));
+                            let dataToSendSodaScreen = {numeroOrden:data.numeroOrden,estado:'p'};
+                            socket.emit('waiter-mark-order',dataToSendSodaScreen);
+                        },
+                        data: JSON.stringify(dataToSend)
+                    });
+                });
+            }
+
+            function agregarPedidoInterfaz(pedido){
+                let numeroPedido = listaPedidos.length;
+                let text_area = $('#carrito');
+                let valorActualCarrito = text_area.val();
+                let str = "Pedido "+numeroPedido+": "+ JSON.stringify(pedido)+"\n\n";
+                text_area.val(valorActualCarrito+str);
+            }
+
+            function agregarListener(){
+                $('button.pointer').click(function(){
+                    let padre = $(this).parent().parent();
+                    let hijos = padre.find('td');
+                    let referenciaInput = null;
+                    let pedido = {};
+
+                    hijos.each(function(index){
+                        
+                        let elemento = $(this);
+
+                        if (elemento.attr('class') === "nombre"){
+                            pedido.comida = elemento.text();
+                        }else if(elemento.attr('class') === "precio"){
+                            pedido.precio = elemento.text();
+                        }else if(elemento.attr('class') === "cantidad"){
+                            referenciaInput = elemento.children(0);
+                            let valor = referenciaInput.val();
+                            pedido.cantidad = valor;
+                        }
+                    });
+
+                    referenciaInput.val('');
+                    listaPedidos.push(pedido);
+                    agregarPedidoInterfaz(pedido);
+                    console.log("cantidad de pedidos = "+listaPedidos.length);
+                });    
+            }
+
+            mostrarMenu();
+        });
+    </script>
+    <style>
+        .pointer {cursor: pointer;height: 50px;font-size: 1em}
+
+        .letraGrande{
+            font-size: 200%; /*El tamaño ´por default es de 16px para las letras, así que
+            un tamaño de 200% representa 32 pixels.
+            */
+        }
+
+        .btnSucces{
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            position: fixed;/*Se libera el elemento del flujo normal del documento*/
+            background-color: green;
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            opacity: 0.70;
+            right: 0px;
+            top: 0px;
+            bottom: 0px;
+        }
+
+        .btnDanger{
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: red;
+            opacity: 0.45;
+            float: right;
+        }
+
+        a.btnDanger:hover {
+            background-color: green;
+            padding: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 id="tituloMenu"></h1>
+
+    <table class="pointer">
+        <thead id="cabeceraTabla">
+            <!--Dinamicamente se agrega la cabecera de la tabla del menu-->
+        </thead>
+        <tbody id="tableBody">
+            <!--Aqui se mostrará el menu de la soda-->
+        </tbody>
+    </table>
+    
+    <div id="carritoCompras">
+        <!--Se agrega dinamicamente los elementos que mostraran el carrito de compras-->
+    </div>
+
+    
+    <div>
+        <input style="height:50px;width:100px;font-size: 2em;" type="number" name="" id="orderNumber">
+        <button style="height:50px;font-size: 1em;" id="btnReady">Marcar como listo</button>
+    </div>
+
+    <div>
+        <input style="height:50px;width:100px;font-size: 2em;" type="number" name="" id="orderNumberToSold">
+        <button style="height:50px;font-size: 1em;" id="btnSold">Marcar como vendido</button>
+    </div>
+
+    <div>
+        <input style="height:50px;width:100px;font-size: 2em;" type="number" name="" id="orderNumberToDelete">
+        <button style="height:50px;font-size: 1em;" id="btnDelete">Eliminar Orden</button>
+    </div>
+
+    <div>
+        <input style="height:50px;width:100px;font-size: 2em;" type="number" name="" id="orderNumberToPending">
+        <button style="height:50px;font-size: 1em;" id="btnPending">Marcar pendiente</button>
+    </div>
+    
+</body>
+</html>

@@ -1,0 +1,196 @@
+#root{
+    position: relative;
+}
+
+/*
+.formContainer
+*/
+
+.carritoItems{
+    background-color: brown;
+    text-align: left;
+    padding: 4px;
+}
+
+.carritoItems input[type="text"]{
+    border: none;
+    border-radius: 50px;
+    height: 40px;
+    width: 70%;
+    margin-top: 4px;
+    padding: 2px;
+    display: block;
+    margin: 0 auto;
+}
+
+.carritoItems input[type="number"]{
+    border: none;
+    border-radius: 50px;
+    height: 40px;
+    width: 70%;
+    margin-top: 4px;
+    padding: 2px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 4px;
+}
+
+.carritoItems input[type="checkbox"]{
+    border: none;
+    border-radius: 50px;
+    height: 20px;
+    width: 20px;
+    padding: 2px;
+}
+
+.carritoItems label{
+    margin-left: 5px;
+}
+
+.carritoItems span{
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.carritoItems p{
+    margin: 0px;
+}
+
+.carritoItems button{
+    display: block;
+    width: 70%;
+    height: 40px;
+    border-radius: 10px;
+    margin: 0 auto;
+    border: none;
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-top: 1em;
+}
+
+.carritoItems label{
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.letraMediana{
+    color: white;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.divisorTotal{
+    margin: 8px 0px 8px 0px;
+}
+
+.container-hacer-pedido{
+    position: relative;
+    padding: 7px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: rgba(1,1,1,0.7);
+    width: 70%;
+    border-radius: 10px;
+    margin-top: 12px;
+}
+
+.list-comidas-container{
+    width: 85%;
+    padding: 10px;
+    padding-bottom: 4px;
+    text-align: center;
+    background-color: aquamarine;
+    margin: 0 auto;
+    margin-top: 7px;
+}
+
+/*
+form input
+*/
+
+.listaComidas{
+    padding: 0px;
+    list-style: none;
+    background-color: coral;
+}
+
+.listItem{
+    display: flex;
+    justify-content: space-between;
+    background-color: blue;
+    margin-bottom: 7px;
+    height: 80px;
+}
+
+.itemInformationContainer{
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+    padding: 4px;
+}
+
+.priceAndQuantityContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.nombreComida{
+    color: white;
+    font-size: 1.3em;
+    font-weight: bold;
+    align-self: center;
+}
+
+.cantidad{
+    display: flex;
+    width: 40px;
+    height: 40px;
+    background-color: blueviolet;
+    border-radius: 50%;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.price{
+    color: white;
+    font-size: 1.3em;
+}
+
+.itemInformationContainer p{
+    margin: 0;
+}
+
+.itemControlsContainer{
+    padding: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.itemControlsContainer input[type="button"]{
+    border: none;
+    border-radius: 10px;
+    height: 35px;
+    width: 35px;
+    padding: 2px;
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+    line-height: 50%;
+}
+
+.add{
+    background-color: green;
+}
+
+.substract{
+    background-color: red;
+}

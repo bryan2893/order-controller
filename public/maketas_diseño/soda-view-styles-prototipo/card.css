@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css?family=Merienda');
+
+body{
+    background-color: rgba(153, 153, 102,.6);
+}
+
+.orders-list-container{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 100px;
+}
+
+.order{
+    background-color: rgba(204, 153, 0,.6);
+    padding: 0;
+    color: white;
+    font-size: 1.3em;
+    text-align: center;
+    border-radius: 10px;
+    margin: 4px 4px 4px 4px;
+    width: 325px;
+    height: 200px;
+    overflow-y: auto;
+}
+
+.ready{
+    background-color: rgba(0,102,0,.6);
+}
+
+.sold{
+    background-color: rgba(9, 15, 206, .6);
+}
+
+.foodList{
+    list-style: none;
+    padding-left: 0px;
+    font-family: 'Merienda', cursive;
+}
+
+.foodList li{
+    margin-bottom: 19px;
+}
+
+.order::-webkit-scrollbar{
+    display: none;
+}
+
+.orderInformation{
+    display: flex;
+    justify-content: space-between;
+}
+
+.orderNumerator{
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 4px 0px 8px 4px;
+}
+
+.orderNumerator span {
+    background-color: chocolate;
+    border-radius: 50%;
+}
+
+.orderLlevarOaqui{
+    margin: 0;
+    font-weight: bold;
+    font-size: 1em;
+    margin: 4px 4px 0px 4px; 
+}
+
+.orderLlevarOaqui span{
+    background-color: chocolate;
+    border-radius: 5px;
+}
+
+.orderClientName{
+    margin: 0;
+    font-weight: bold;
+    font-size: 1em;
+    margin-bottom: 20px;
+    background-color: chocolate;
+    border-radius: 10px;
+}
+
+.numerator{
+    width: 1.2em;
+    height: 1.2em;
+    color: white;
+    background-color: green;
+    border-radius: 50%;
+    padding: 5px;
+    text-align: center;
+}

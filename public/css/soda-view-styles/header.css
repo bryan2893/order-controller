@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css?family=VT323');
+
+.cabecera{
+    width:100%;
+    height: 100px;
+    background-color: rgba(115, 14, 170, .6);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    color: white;
+    font-size: 2.5em;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.stadistics {
+    display: flex;
+    font-family: 'VT323', monospace;
+}
+
+.stadistics div{
+    margin-right: 30px;
+}
+
+.stadistics div p{
+    margin: 0;
+    padding: 0px;
+}
+
+p span{
+    font-weight: bold;
+}
+
+.btnActualizar {
+    height: 50%;
+    width: 100px;
+    padding: 0;
+    margin-right: 2px;
+    border-radius: 10px;
+    color: white;
+    background-color: rgba(103, 27, 126, 1);
+    border-color: white;
+    font-size: .5em;
+}
