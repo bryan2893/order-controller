@@ -15,7 +15,7 @@ export default class ManejadorPedidos{
     buscarComidaEnMenu(clave){
         for (let index = 0; index < this.menu.length; index++) {
             const comida = this.menu[index];
-            if(comida.clave === clave){
+            if(comida.id === clave){
                 return index;
             }
         }
@@ -24,7 +24,7 @@ export default class ManejadorPedidos{
 
     agregarComidaAPedido(comida){
         //let indexComida = this.buscarComidaEnPedido(comida.clave);
-        let indexComidaMenu = this.buscarComidaEnMenu(comida.clave);
+        let indexComidaMenu = this.buscarComidaEnMenu(comida.id);
 
         if(indexComidaMenu !== null){//Si la comida ha sido ordenada ya entonces...
             //this.pedido[indexComida].cantidad += 1;
@@ -36,7 +36,7 @@ export default class ManejadorPedidos{
 
     restarComidaPedido(comida){
         //let indexComida = this.buscarComidaEnPedido(comida.clave);
-        let indexComidaMenu = this.buscarComidaEnMenu(comida.clave);
+        let indexComidaMenu = this.buscarComidaEnMenu(comida.id);
 
         if(indexComidaMenu !== null){//Si la comida ha sido ordenada ya entonces...
             let cantidadComidasDeEsteTipo = this.menu[indexComidaMenu].cantidad;

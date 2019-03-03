@@ -37,7 +37,7 @@ export default class ShipCar extends React.Component{
             return (<h3>Orden vacía!</h3>);
         }else{
             let items = this.props.listado.map(function(filaComida){
-                return (<p className="letraMediana"><span>+{filaComida.cantidad} </span>{filaComida.comida}</p>);
+                return (<p className="letraMediana"><span>+{filaComida.cantidad} </span>{filaComida.nombre}</p>);
             });
     
             return(

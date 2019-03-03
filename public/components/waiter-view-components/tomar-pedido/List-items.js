@@ -4,6 +4,11 @@ import ItemPedido from './Item-pedido';
 export default class ListItems extends React.Component{
     constructor(props){
         super(props);
+        for (let index = 0; index < this.props.itemsComida.length; index++) {
+          const comida = this.props.itemsComida[index];
+          comida.cantidad = 0; //se agrega campo cantidad a cada comida para
+          //que pueda ser manejada por "manejador de pedidos".
+        }
     }
 
     //pedido es una lista de {"comida":"alguna comida"....}

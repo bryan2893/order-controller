@@ -94,6 +94,12 @@ export default class ParentViewTomaPedido extends React.Component{
         let selfReference = this;
         getFoods(function(err,listaComidas){
             if(!err){
+                //Primeramente se agrega un campo cantidad a cada item del menu
+                //ya que ese campo lo utiliza el manejador de pedidos.
+                for (let index = 0; index < listaComidas.length; index++) {
+                    const itemComida = listaComidas[index];
+                    itemComida.cantidad = 0;
+                }
                 manejadorPedidos = new ManejadorPedidos(listaComidas);
                 selfReference.setState({menu:listaComidas});
             }
