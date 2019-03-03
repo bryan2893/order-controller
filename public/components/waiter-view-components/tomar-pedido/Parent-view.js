@@ -5,6 +5,7 @@ import ManejadorPedidos from './services/Manejador2';
 import ShipCar from './Ship-Car';
 import '../../../css/waiter-view-styles/tomaPedido.css';
 import socketLogicObject from '../../../socket-logic/waiter-logic';
+import {getFoods} from '../../../model/index';
 
 //Lista del menu de la soda, provisional.
 let listaPrueba = [
@@ -52,14 +53,6 @@ let listaPrueba = [
 
   ];//solo para probar el componente de hacer pedidos.
 
-//Simula la llamada a un Api la cual responde un segundo despues
-//devolviendo un alista de comidas.
-const simuladorApiTraeListaComidas = function(callback){
-    setTimeout(function(){
-        callback(null,listaPrueba);
-    },2000)
-};
-
 let manejadorPedidos = null;
 
 
@@ -99,12 +92,13 @@ export default class ParentViewTomaPedido extends React.Component{
 
     componentDidMount(){
         let selfReference = this;
-        simuladorApiTraeListaComidas(function(err,listaComidas){
+        getFoods(function(err,listaComidas){
             if(!err){
                 manejadorPedidos = new ManejadorPedidos(listaComidas);
                 selfReference.setState({menu:listaComidas});
             }
         });
+
     }
 
     componentWillUnmount(){

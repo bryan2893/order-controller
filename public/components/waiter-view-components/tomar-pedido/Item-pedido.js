@@ -44,7 +44,7 @@ export default class ItemPedido extends React.Component{
             <li className="listItem">
                 
                 <div className="itemInformationContainer">
-                    <p className="nombreComida">{this.props.comida.comida}</p>
+                    <p className="nombreComida">{this.props.comida.nombre}</p>
                     <div className="priceAndQuantityContainer">
                         <p className="cantidad">{this.props.comida.cantidad}</p>
                         <p className="price">{'₡'+this.props.comida.precio}</p>

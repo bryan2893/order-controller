@@ -1,5 +1,5 @@
 import React from 'react';
-import {getFoods} from './dataExtractors/FoodRequests';
+import {getFoods} from '../../../model/index';
 import FoodList from './FoodList';
 
 export default class Menu extends React.Component{
