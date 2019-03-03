@@ -1,15 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Dancing+Script');
 
-ul h1{
-    color: white;
-    font-family: 'Dancing Script', cursive;
-}
-
-ul{
+.menuContainer{
+    margin-top: 20px;
     list-style-type: none;
     padding-left: 0;
     text-align: center;
 }
+
 .menuItem{
     height: 50px;
     background-color: rgba(138,43,226, .8);
@@ -19,7 +16,7 @@ ul{
     border-radius: 20px;
     color: white;
     font-family: 'Charm', cursive;
-    font-size: 25px;
+    font-size: 20px;
     display: flex;
     justify-content: space-between;
     padding: 5px;
@@ -29,4 +26,7 @@ ul{
      height: 100%;
      width: 80px;
      border-radius: 20px;
+     font-size: 15px;
+     font-weight: bold;
+     margin-left: 5px;
  }

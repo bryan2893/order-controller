@@ -1,6 +1,5 @@
     import React from 'react';
     import Fooditem from './Fooditem';
-    //import axios from 'axios';
 
     export default class FoodList extends React.Component{
         constructor(props){
@@ -9,7 +8,7 @@
 
         render(){
             return(
-                <ul>
+                <ul className="menuContainer">
                     {this.props.listaComidas.map(function(comida){
                         return <Fooditem comida={comida} key={comida.id}/>
                     })}
