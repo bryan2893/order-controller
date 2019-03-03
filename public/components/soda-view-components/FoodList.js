@@ -2,8 +2,8 @@ import React from 'react';
 
 const FoodList = (props) => (
     <ul className="foodList">
-        {props.listado.map((or,index)=> (
-        <li key={index}>{or.comida} <span className="numerator">+{or.cantidad}</span></li>
+        {props.listado.map((comida,index)=> (
+        <li key={index}>{comida.nombre} <span className="numerator">+{comida.cantidad}</span></li>
         ))}
     </ul>
 );
